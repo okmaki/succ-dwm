@@ -37,6 +37,7 @@ dist: clean
 	rm -rf dwm-${VERSION}
 
 install: all
+	[ -f themes.h ] || wget https://raw.githubusercontent.com/makidotnet/succ-themes/master/themes.h
 	mkdir -p ${DESTDIR}${PREFIX}/bin
 	cp -f dwm ${DESTDIR}${PREFIX}/bin
 	chmod 755 ${DESTDIR}${PREFIX}/bin/dwm
