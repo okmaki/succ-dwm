@@ -19,7 +19,7 @@ options:
 
 ${OBJ}: config.h config.mk
 
-config.h:
+config.h: getthemes
 	cp config.def.h $@
 
 dwm: ${OBJ}
@@ -37,7 +37,6 @@ dist: clean
 	rm -rf dwm-${VERSION}
 
 install: all
-	[ -f themes.h ] || wget https://raw.githubusercontent.com/makidotnet/succ-themes/master/themes.h
 	mkdir -p ${DESTDIR}${PREFIX}/bin
 	cp -f dwm ${DESTDIR}${PREFIX}/bin
 	chmod 755 ${DESTDIR}${PREFIX}/bin/dwm
@@ -48,5 +47,8 @@ install: all
 uninstall:
 	rm -f ${DESTDIR}${PREFIX}/bin/dwm\
 		${DESTDIR}${MANPREFIX}/man1/dwm.1
+
+getthemes:
+	[ -f themes.h ] || wget https://raw.githubusercontent.com/makidotnet/succ-themes/master/themes.h
 
 .PHONY: all options clean dist install uninstall
