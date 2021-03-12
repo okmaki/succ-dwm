@@ -12,15 +12,14 @@ static const unsigned int gappov    = 20;       /* vert outer gap between window
 static       int smartgaps          = 0;        /* 1 means no outer gap when there is only one window */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 0;        /* 0 means bottom bar */
-static const char col_gray1[]       = "#222222";
-static const char col_gray2[]       = "#444444";
-static const char col_gray3[]       = "#bbbbbb";
-static const char col_gray4[]       = "#eeeeee";
-static const char col_cyan[]        = "#005577";
+static const int user_bh	    = 30;	/* 0 means that dwm will calculate basr height, >= 1 means dwm will user_bh as bar height */
+static const double defaultopacity  = 0.8;
+
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
-	[SchemeNorm] = { col_text0, col_mbar0, col_brdr0 },
-	[SchemeSel]  = { col_text1, col_mbar1, col_brdr1 },
+	[SchemeNorm] = { col_black1,col_bg,    col_fg },
+	[SchemeSel]  = { col_green1,col_black0,col_fg },
+	[SchemeStatic]={ col_green1,col_bg,    col_fg },
 };
 
 /* tagging */
@@ -33,7 +32,7 @@ static const Rule rules[] = {
 	 */
 	/* class      instance    title       tags mask     isfloating   monitor */
 	{ "Gimp",     NULL,       NULL,       0,            1,           -1 },
-	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           -1 },
+	// { "Firefox",  NULL,       NULL,       1 << 8,       0,           -1 },
 };
 
 /* layout(s) */
@@ -76,7 +75,7 @@ static const Layout layouts[] = {
 
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
-static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_mbar0, "-nf", col_text0, "-sb", col_mbar1, "-sf", col_text1, NULL };
+static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_black0, "-ab", col_black1, "-nf", col_fg, "-sb", col_fg, "-sf", col_green0, NULL };
 static const char *termcmd[]  = { "st", NULL };
 
 static Key keys[] = {
