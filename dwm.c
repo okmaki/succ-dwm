@@ -59,7 +59,7 @@
 
 /* enums */
 enum { CurNormal, CurResize, CurMove, CurLast }; /* cursor */
-enum { SchemeNorm, SchemeSel, SchemeStatic }; /* color schemes */
+enum { SchemeNorm, SchemeSel, SchemeTag, SchemeTagOcc, SchemeStatic }; /* color schemes */
 enum { NetSupported, NetWMName, NetWMState, NetWMCheck,
        NetWMFullscreen, NetActiveWindow, NetWMWindowType,
        NetWMWindowTypeDialog, NetClientList, NetLast,
@@ -725,14 +725,23 @@ drawbar(Monitor *m)
 	}
 	x = 0;
 	for (i = 0; i < LENGTH(tags); i++) {
-		w = TEXTW(tags[i]);
-		drw_setscheme(drw, scheme[m->tagset[m->seltags] & 1 << i ? SchemeSel : SchemeNorm]);
-		drw_text(drw, x, 0, w, bh, lrpad / 2, tags[i], urg & 1 << i);
-		if (occ & 1 << i)
-			// drw_rect(drw, x + boxs, boxs, boxw, boxw,
-				// m == selmon && selmon->sel && selmon->sel->tags & 1 << i,
-				// urg & 1 << i);
-			drw_rect(drw, x, 0, w, boxw, 1, urg & 1 << i);
+		w = bh;
+
+		int is_occupied = occ & 1 << i;
+		int is_selected = m->tagset[m->seltags] & 1 << i;
+
+		drw_setscheme(drw, scheme[SchemeNorm]);
+		drw_rect(drw, x, 0, w, bh, 1, urg & 1 << i);
+
+		int tag_size   = bh / 2;
+		int tag_offset = bh / 4; 
+
+		drw_setscheme(drw, scheme[is_occupied ? SchemeTagOcc : SchemeTag]);
+		drw_circ(drw, x + tag_offset, tag_offset, tag_size, tag_size, 1, urg & 1 << i);
+		
+		drw_setscheme(drw, scheme[is_selected ? SchemeTagOcc : SchemeTag]);
+		drw_circ(drw, x + tag_offset * 1.5, tag_offset * 1.5, tag_size / 2, tag_size / 2, 1, urg & 1 << i);
+
 		x += w;
 	}
 	w = blw = TEXTW(m->ltsymbol);
