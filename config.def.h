@@ -11,21 +11,21 @@ static const unsigned int gappoh    = 20;       /* horiz outer gap between windo
 static const unsigned int gappov    = 20;       /* vert outer gap between windows and screen edge */
 static       int smartgaps          = 0;        /* 1 means no outer gap when there is only one window */
 static const int showbar            = 1;        /* 0 means no bar */
-static const int topbar             = 0;        /* 0 means bottom bar */
+static const int topbar             = 1;        /* 0 means bottom bar */
 static const int user_bh	    = 32;	/* 0 means that dwm will calculate basr height, >= 1 means dwm will user_bh as bar height */
 static const double defaultopacity  = 0.8;
 
 static const char *colors[][3]      = {
 	/*               	fg		bg    		border   */
-	[SchemeNorm]	= { 	col_bg,    	col_bg,    	col_bg },
-	[SchemeSel]  	= { 	col_black0,	col_black0,	col_black0 },
-	[SchemeTag]  	= { 	col_black1,    	col_black1,	col_black1 },
-	[SchemeTagOcc] 	= { 	col_fg,    	col_fg,    	col_fg },
-	[SchemeStatic]	= { 	col_fg,    	col_bg,    	col_fg },
+	[SchemeNorm]	= { 	col_fg,    	col_bg,    	col_fg },
+	[SchemeSel]  	= { 	col_fg,		col_bg,		col_fg },
+	[SchemeTagNorm] = { 	col_black1,    	col_bg,		col_fg },
+	[SchemeTagSel] 	= { 	col_green0,    	col_bg,    	col_fg },
 };
 
 /* tagging */
-static const char *tags[] = { "1", "2", "3", "4", "5" };
+static const char *tags[] = { "", "", "", "", "" };
+static const char *tagsSel[] = { "", "", "", "", "" };
 
 static const Rule rules[] = {
 	/* xprop(1):
@@ -77,7 +77,7 @@ static const Layout layouts[] = {
 
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
-static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_bg, "-ab", col_black0, "-nf", col_fg, "-sb", col_black1, "-sf", col_fg, "-p", "run:", NULL };
+static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_bg, "-ab", col_bg, "-nf", col_fg, "-sb", col_red0, "-sf", col_fg, "-p", "﬌ run:", NULL };
 static const char *termcmd[]  = { "st", NULL };
 
 static Key keys[] = {
