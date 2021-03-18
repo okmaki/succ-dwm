@@ -59,7 +59,7 @@
 
 /* enums */
 enum { CurNormal, CurResize, CurMove, CurLast }; /* cursor */
-enum { SchemeNorm, SchemeSel, SchemeTag, SchemeTagOcc, SchemeStatic }; /* color schemes */
+enum { SchemeNorm, SchemeSel, SchemeTagNorm, SchemeTagSel }; /* color schemes */
 enum { NetSupported, NetWMName, NetWMState, NetWMCheck,
        NetWMFullscreen, NetActiveWindow, NetWMWindowType,
        NetWMWindowTypeDialog, NetClientList, NetLast,
@@ -713,7 +713,7 @@ drawbar(Monitor *m)
 
 	/* draw status first so it can be overdrawn by tags later */
 	if (m == selmon) { /* status is only drawn on selected monitor */
-		drw_setscheme(drw, scheme[SchemeStatic]);
+		drw_setscheme(drw, scheme[SchemeNorm]);
 		tw = TEXTW(stext) - lrpad + 2; /* 2px right padding */
 		drw_text(drw, m->ww - tw, 0, tw, bh, 0, stext, 0);
 	}
@@ -725,33 +725,26 @@ drawbar(Monitor *m)
 	}
 	x = 0;
 	for (i = 0; i < LENGTH(tags); i++) {
-		w = bh;
+		w = TEXTW(tags[i]);
 
 		int is_occupied = occ & 1 << i;
 		int is_selected = m->tagset[m->seltags] & 1 << i;
 
-		drw_setscheme(drw, scheme[SchemeNorm]);
-		drw_rect(drw, x, 0, w, bh, 1, urg & 1 << i);
-
-		int tag_size   = bh / 2;
-		int tag_offset = bh / 4; 
-
-		drw_setscheme(drw, scheme[is_occupied ? SchemeTagOcc : SchemeTag]);
-		drw_circ(drw, x + tag_offset, tag_offset, tag_size, tag_size, 1, urg & 1 << i);
-		
-		drw_setscheme(drw, scheme[is_selected ? SchemeTagOcc : SchemeTag]);
-		drw_circ(drw, x + tag_offset * 1.5, tag_offset * 1.5, tag_size / 2, tag_size / 2, 1, urg & 1 << i);
+		drw_setscheme(drw, scheme[is_occupied ? SchemeTagSel : SchemeTagNorm]);
+		drw_text(drw, x, 0, w, bh, lrpad / 2, is_selected ? tagsSel[i] : tags[i], 0);
 
 		x += w;
 	}
-	w = blw = TEXTW(m->ltsymbol);
+	//w = blw = TEXTW(m->ltsymbol);
 	drw_setscheme(drw, scheme[SchemeNorm]);
-	x = drw_text(drw, x, 0, w, bh, lrpad / 2, m->ltsymbol, 0);
+	//x = drw_text(drw, x, 0, w, bh, lrpad / 2, m->ltsymbol, 0);
+	drw_rect(drw, x, 0, bh, bh, 1, 1);
+	x += bh;
 
 	if ((w = m->ww - tw - x) > bh) {
 		if (m->sel) {
 			// drw_setscheme(drw, scheme[m == selmon ? SchemeSel : SchemeNorm]);
-			drw_setscheme(drw, scheme[SchemeStatic]);
+			drw_setscheme(drw, scheme[SchemeNorm]);
 			drw_text(drw, x, 0, w, bh, lrpad / 2, m->sel->name, 0);
 			if (m->sel->isfloating)
 				drw_rect(drw, x + boxs, boxs, boxw, boxw, m->sel->isfixed, 0);
